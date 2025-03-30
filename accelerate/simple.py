@@ -10,7 +10,8 @@ from transformers import (
 from torch.utils.data import DataLoader
 from torch.optim import AdamW
 from tqdm import tqdm
-from datasets import load_metric
+from evaluate import load
+
 
 
 def parse_args():
@@ -63,7 +64,7 @@ def main():
         name="linear", optimizer=optimizer, num_warmup_steps=0, num_training_steps=max_train_steps
     )
 
-    metric = load_metric("glue", "cola")
+    metric = load("glue", "cola")
 
     progress_bar = tqdm(range(max_train_steps))
     for epoch in range(args.num_train_epochs):
