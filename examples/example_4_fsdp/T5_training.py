@@ -48,6 +48,7 @@ import time
 import tqdm
 from datetime import datetime
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 
 def get_policies(cfg, rank):
 
@@ -87,16 +88,9 @@ def fsdp_main(args):
     world_size = int(os.environ['WORLD_SIZE'])
 
 
-    #dataset = nlp.load_dataset('wikihow',data_dir="~/data")
-    #print("Size of train dataset: ", dataset['train'].shape)
-    #print("Size of Validation dataset: ", dataset['validation'].shape)
-    dataset = load_dataset(
-        "csv",
-        data_files={
-            "train": "/home/hjimenez/accelerate_deepspeed/examples/example_4_fsdp/data/wikihowAll.csv",
-            "validation": "/home/hjimenez/accelerate_deepspeed/examples/example_4_fsdp/data/wikihowSep.csv"
-        }
-    )
+    dataset = nlp.load_dataset('wikihow',data_dir="~/data/")
+    print("Size of train dataset: ", dataset['train'].shape)
+    print("Size of Validation dataset: ", dataset['validation'].shape)
 
     #wikihow(tokenizer, type_path, num_samples, input_length, output_length, print_text=False)
     train_dataset = wikihow(tokenizer, 'train', 1500, 512, 150, False)
