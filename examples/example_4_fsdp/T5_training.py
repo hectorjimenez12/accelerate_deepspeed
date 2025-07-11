@@ -16,7 +16,6 @@ from torch.utils.data.distributed import DistributedSampler
 from transformers.models.t5.modeling_t5 import T5Block
 #from nlp import load_dataset
 from datasets import load_dataset
-import nlp
 
 from torch.distributed.fsdp import (
     FullyShardedDataParallel as FSDP,
@@ -84,11 +83,13 @@ def fsdp_main(args):
     model, tokenizer = setup_model(train_config.model_name)
 
     local_rank = int(os.environ['LOCAL_RANK'])
-    rank = int(os.environ['RANK'])
+    rank       = int(os.environ['RANK'])
     world_size = int(os.environ['WORLD_SIZE'])
 
+    import datasets
+    print(f""" Datasets: {datasets.__version__}""")
 
-    dataset = nlp.load_dataset('wikihow',data_dir="~/data/")
+    dataset = load_dataset('wikihow', 'all', data_dir='./wikihow')
     print("Size of train dataset: ", dataset['train'].shape)
     print("Size of Validation dataset: ", dataset['validation'].shape)
 
